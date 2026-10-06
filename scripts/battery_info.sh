@@ -2,15 +2,16 @@
 
 linux_acpi() {
   arg=$1
-  BAT=$(ls -d /sys/class/power_supply/BAT* | head -1)
+  BAT=$(ls -d /sys/class/power_supply/BAT* 2>/dev/null | head -1)
   if [ ! -x "$(which acpi 2> /dev/null)" ];then
+    [ -z "$BAT" ] && return
     case "$arg" in
       status)
-        cat $BAT/status
+        cat "$BAT/status" 2>/dev/null
         ;;
 
       percent)
-        cat $BAT/capacity
+        cat "$BAT/capacity" 2>/dev/null
         ;;
 
       *)

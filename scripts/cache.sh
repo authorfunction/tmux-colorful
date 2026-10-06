@@ -102,14 +102,15 @@ execute_with_cache() {
     local script_path=$2
 
     # Try to get cached value first
-    local cached_value=$(get_cached_value "$plugin")
+    local cached_value
+    cached_value=$(get_cached_value "$plugin")
     if [ $? -eq 0 ]; then
         echo "$cached_value"
         return 0
     fi
 
     # Execute the script and cache the result
-    local result=$("$script_path")
+    local result=$("$script_path" 2>/dev/null)
     set_cache_value "$plugin" "$result"
     echo "$result"
 }

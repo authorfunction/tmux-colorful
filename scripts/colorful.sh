@@ -30,13 +30,11 @@ color_counter=0
 for plugin in "${plugins[@]}"; do
   if [ $plugin = "battery" ]; then
     battery_life_icon=$(get_tmux_option '@tmux_colorful_battery_life_icon' '♥')
-    battery_level=$(execute_with_cache "battery" "$current_dir/battery_info.sh")
-    script="$battery_life_icon $battery_level%"
+    script="$battery_life_icon #($current_dir/battery_info.sh 2>/dev/null)%"
   fi
 
   if [ $plugin = "cpu" ]; then
-    cpu_info=$(execute_with_cache "cpu" "$current_dir/cpu_info.sh")
-    script="CPU $cpu_info%%"
+    script="CPU #($current_dir/cpu_info.sh 2>/dev/null)%%"
   fi
 
   if [ $plugin = "date" ]; then
@@ -52,13 +50,11 @@ for plugin in "${plugins[@]}"; do
   fi
 
   if [ $plugin = "network" ]; then
-    network_info=$(execute_with_cache "network" "$current_dir/network_info.sh")
-    script="$network_info"
+    script="#($current_dir/network_info.sh 2>/dev/null)"
   fi
 
   if [ $plugin = "git" ]; then
-    git_info=$(execute_with_cache "git" "$current_dir/git_info.sh")
-    script="$git_info"
+    script="#($current_dir/git_info.sh 2>/dev/null)"
   fi
 
   if [ "${color_counter}" -eq "${#colors[@]}" ]; then
@@ -107,7 +103,7 @@ set_tmux_option clock-mode-colour $clock_mode_color
 set_tmux_option clock-mode-style $clock_mode_style
 
 # Copy mode highlight
-copy_mode_highlight=$(get_tmux_option '@tmux_colorful_copy_mode_highlight' "$bg=$color_primary")
+copy_mode_highlight=$(get_tmux_option '@tmux_colorful_copy_mode_highlight' "bg=$color_primary")
 set_tmux_option mode-style $copy_mode_highlight
 
 # Overall status bar
